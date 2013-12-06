@@ -53,17 +53,23 @@ class LinkedList:
                 print "this should be 6: " + str(data)
                 print "this shoul NOT be None: " + str(tmp)
                 while (tmp):
-                    if ( tmp.data < data):
+                    if ( tmp.data < data):#if the data in tmp node is smaller that that of the 
+                        #Node that we currently have then advance both pointers
                         
                         tmp = tmp.next
                         prev = prev.next 
                         if (tmp == None):
+                            #while advancing pointers if you find that tmp is past the end node
+                            #then use prev to make sure that the last node points to the new node
                             prev.next = fresh_add
                             
 
                     else:
                         print "four should be here: " + str(data)
-                        if ( self.head.data > data):
+                        if ( self.head.data > data):#checks if the node to be added has data
+                            #smaller that the head node of the linked list if so it makes 
+                            #the new fresh node the head of the list. This piece of oode
+                            #code have come first in the function, but i'm too lazy to move it lol
                             print "ONCE"
                             print "------------------------------------"
                             print self.head.data, fresh_add.data
@@ -74,12 +80,8 @@ class LinkedList:
 
                             print "------------------------------------"
                             break 
-#                        if tmp.next == None:
-#                            tmp.next = fresh_add
-#                            print "added node with data: " + str(data)
-#                            break 
-#                        else:
-                        else:
+
+                        else: #this the the in between part
                             print "ONCE"
                             fresh_add.next = tmp
                             prev.next = fresh_add
@@ -115,6 +117,8 @@ class LinkedList:
 
 mylist = LinkedList()
 
+for i in range(30):
+    
 mylist.sorted_add(3)
 mylist.sorted_add(6)
 mylist.sorted_add(4)
