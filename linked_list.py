@@ -32,18 +32,67 @@ class LinkedList:
             self.head = new
 
     def sorted_add(self,data):
+#        if self.head != None:
+#            print "the head is a moving target: " + str(self.head.data)
         fresh_add = Node(data)
         
         if self.head == None:
-            self.head = fresh_add
-        else:
-            if self.head.data > fresh_add.data:
-                fresh_add.next = self.head
-                self.head = fresh_add.next
-            else:
-                tmp = self.head
 
+            self.head = fresh_add
+            print "added node with data:--- " + str(data)
+
+        else:
+            print "OK"
+            ##if it's only a node then we add fresh_add to the end
+            if self.head.next == None:
+                self.head.next = fresh_add
+                print "added node with data:---------- " + str(data)
+            else:#now we have more than a node ,lets go
+                prev = self.head
+                tmp = self.head.next
+                print "this should be 6: " + str(data)
+                print "this shoul NOT be None: " + str(tmp)
+                while (tmp):
+                    if ( tmp.data < data):
+                        
+                        tmp = tmp.next
+                        prev = prev.next 
+                        if (tmp == None):
+                            prev.next = fresh_add
+                            
+
+                    else:
+                        print "four should be here: " + str(data)
+                        if ( self.head.data > data):
+                            print "ONCE"
+                            print "------------------------------------"
+                            print self.head.data, fresh_add.data
+
+                            fresh_add.next = self.head
+                            self.head = fresh_add
+
+
+                            print "------------------------------------"
+                            break 
+#                        if tmp.next == None:
+#                            tmp.next = fresh_add
+#                            print "added node with data: " + str(data)
+#                            break 
+#                        else:
+                        else:
+                            print "ONCE"
+                            fresh_add.next = tmp
+                            prev.next = fresh_add
+
+                            print "added node with data:------------------------ " + str(data)
+                            break 
+                        
                 
+
+                    
+            
+
+            
 
     def append(self,data):
         new = Node(data)
@@ -62,15 +111,21 @@ class LinkedList:
             print tmp.data
             tmp = tmp.next 
 
-new = Node(2)
+
 
 mylist = LinkedList()
 
-mylist.add(3)
-mylist.add(4)
-mylist.add(6)
-mylist.append(1000)
+mylist.sorted_add(3)
+mylist.sorted_add(6)
+mylist.sorted_add(4)
+mylist.sorted_add(-1)
+
+print "this is what i see"  
+
+
 mylist.see()
+
+
 
         
     
