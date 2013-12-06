@@ -83,7 +83,60 @@ print path_finder(pred,3)
     
     
 #CREATING GRAPHS------------*****************************------------*****************************
+a_l = {}# this will be our adjacency dic
 
+####------>>>>>>>>>FIRST WE MAKE THE MATRIX
+matrix =[]
+no_p = {} #helps us translate node number to coordinates
+p_no = {} #Helps us translate coordinates to node numbers
+allowed = {}#helps us see if we can go through that town 
+#these parameters should be read from the file
+H= 3
+W = 4
+for y in range (H):
+    matrix.append([])
+    for x in range(W):
+        matrix[y].append(x+y)
+        no_p [(x + y )] = (x,y)
+        p_no [(x,y)]= (x +y )
+        allowed[(x,y)]= True
+
+
+list_of_not_allowed_towns = []#this should be populated from the input
+
+for pair in list_of_not_allowed_towns:
+    #iterate thorugh towns that are not allowed and make them "unallowed" set thier
+    #values false in the allowed dictionary
+    allowed[pair] = False 
+    
+def  find_neigh( town): #the input must be an x,y pair , and given a town it gives you all the nodes that need to be neighbours of this town in a list
+    neigh = []
+    all_towns = p_no.keys()
+    for a in [-1,0,1]:    
+        for b in [-1,0,1]:    
+            p_town = [ town[0] +a , town[1]+ b]
+            if ( (p_town !=town ) and (p_town in all_towns)):
+                if (allowed(p_town)):
+                    node = p_no ( p_town)
+                    neigh.append(node)
+    return neigh
+
+#==================================================================
+#Now we create the adjacency matrix
+
+all_towns = no_p.keys()
+all_towns.sort()
+for town in all_towns:
+    pair = no_p[town]
+    if allowed[(pair)]:
+        a_l[town]= find_neigh(pair)
+
+#==================================================================
+
+    
+
+        
+    
 
 
 
