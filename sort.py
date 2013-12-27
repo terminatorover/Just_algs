@@ -24,13 +24,15 @@ print li
 
 
 def bubble_sort( li):
-    for pas in range(len(li)-1,-1,-1):
-        for ind in range(pas-1): 
+#trick is not to stop sorting when you find that the next element is bigger 
+#different logic(a little bit) compared to that of insertion sort
+    for pas in range(len(li)-1,0,-1):
+        for ind in range(pas): 
             print ind,pas
             if li[ind] > li[ind+1]:
                 tmp = li[ind]
                 li[ind] = li[ind + 1]
-                li[ind + 1] = li[ind]
+                li[ind + 1] = tmp 
 
         
         
