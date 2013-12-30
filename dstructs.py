@@ -18,7 +18,12 @@ class Stack:
     
     def peek(self):
         return self.items[-1]
-
+    def iter(self):
+        strr = ""
+        self.items.reverse()
+        for item in self.items:
+            strr += str(item)
+        return strr
 #------------------------------Parentheses ---------------------
 def parcheck( string):
     d_s = Stack()
@@ -50,7 +55,23 @@ sti = "((()))())"
 print parcheck(sti)
 
 #------------------------------Parentheses ---------------------
+#+++++++++++++++++++++++++++++from decimal to any base under hexamdecimal++++++
+def convert(n,base):
+    no = n
+    s = Stack()
+    digits = "0123456789ABCDEF"
+    while (1):
+        if ( no < base):
+            s.push(no)
+            break 
+        rem = no % base
+        s.push(digits[rem])
+        no = (no - rem )/ base#the new number
+    return s.iter()
 
+print convert( 27,16)    
+
+#+++++++++++++++++++++++++++++to binary+++++++++++++++++++++++++++++
 class Queue:
     def __init__(self):
         self.items = [] 
