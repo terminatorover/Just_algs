@@ -131,13 +131,13 @@ def pop_eval( stack,operation):
     for i in range(2):
         ns.append(int(stack.pop()))
     if ( operation == '+'):
-        return ns[0] + ns[1]
+        return ns[1] + ns[0]
     if ( operation == '-'):
         return ns[0] - ns[1]        
     if ( operation == '*'):
         return ns[0] * ns[1]
     if ( operation == '/'):
-        return ns[0] / ns[1]        
+        return float(ns[1]) / ns[0]        
 
         
 def p_e( user_input):
@@ -148,11 +148,12 @@ def p_e( user_input):
     ui = user_input.split()
     for el in  ui:
         if ( el not in operations):
-            s.push(el)
+            s.push(int(el))
         else:
-            s.push(pop_eval(s,el))
+            computed =  pop_eval(s,el)
+            s.push(computed)
     return s.pop()
-p_e('7 8 + 3 2 + /')
+print p_e('7 8 + 3 2 + /')
 #-----------------------------postfix eval ----------------
 
 class Queue:
