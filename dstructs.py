@@ -123,6 +123,38 @@ print i_post("A * B + C * D")
 print i_post("A + B * C")
 #$$$$$$$$$$$$$$$$$$$$$ infix to postfix$$$$$$$$$$$$$$
 
+#-----------------------------postfix eval ----------------
+def pop_eval( stack,operation):
+    '''Pops the last two elements on the stack and then 
+    applies the operation onto them '''
+    ns = []
+    for i in range(2):
+        ns.append(int(stack.pop()))
+    if ( operation == '+'):
+        return ns[0] + ns[1]
+    if ( operation == '-'):
+        return ns[0] - ns[1]        
+    if ( operation == '*'):
+        return ns[0] * ns[1]
+    if ( operation == '/'):
+        return ns[0] / ns[1]        
+
+        
+def p_e( user_input):
+    '''evaluatse a postfix expression , input should be a
+    string where each char is followed by a space'''
+    s = Stack()
+    operations = '+-/*'
+    ui = user_input.split()
+    for el in  ui:
+        if ( el not in operations):
+            s.push(el)
+        else:
+            s.push(pop_eval(s,el))
+    return s.pop()
+p_e('7 8 + 3 2 + /')
+#-----------------------------postfix eval ----------------
+
 class Queue:
     def __init__(self):
         self.items = [] 
