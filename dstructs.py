@@ -17,7 +17,10 @@ class Stack:
         return self.items == []
     
     def peek(self):
-        return self.items[-1]
+        if not( self.isEmpty()):
+            return self.items[-1]
+        else:
+            return False 
     def iter(self):
         strr = ""
         self.items.reverse()
@@ -72,6 +75,45 @@ def convert(n,base):
 print convert( 27,16)    
 
 #+++++++++++++++++++++++++++++to binary+++++++++++++++++++++++++++++
+
+#$$$$$$$$$$$$$$$$$$$$$ infix to postfix$$$$$$$$$$$$$$
+def pop_all( my_stack):
+    final = []
+    while ( my_stack.size()):
+        final.append( my_stack.pop() )
+    return final
+def i_post(exp):
+    s = Stack()
+    output = []
+    a_exp = exp.split()
+    symbols = "ABCD"
+    l_aexp = len(a_exp)
+    index = 0
+    value = {}
+    value['+'] = 1
+    value['-'] = 2
+    value['*'] = 3
+    value['/'] = 4
+    while ( index < l_aexp):
+        if a_exp[index] in symbols:
+            output.append(a_exp[index])
+        else:
+            top = s.peek()
+            if top == False:
+                s.push(a_exp[index])
+            elif (value[top]< value[a_exp[index]]): 
+                s.push(a_exp[index])
+            else:
+                output.extend(pop_all(s))
+                s.push(a_exp[index])
+        index += 1
+    output.extend(pop_all(s))
+    return output            
+
+print i_post("A * B + C * D")
+print i_post("A + B * C")
+#$$$$$$$$$$$$$$$$$$$$$ infix to postfix$$$$$$$$$$$$$$
+
 class Queue:
     def __init__(self):
         self.items = [] 
