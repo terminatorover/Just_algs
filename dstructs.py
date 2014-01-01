@@ -77,16 +77,25 @@ print convert( 27,16)
 #+++++++++++++++++++++++++++++to binary+++++++++++++++++++++++++++++
 
 #$$$$$$$$$$$$$$$$$$$$$ infix to postfix$$$$$$$$$$$$$$
-def pop_all( my_stack):
+def pop_all( my_stack, alll, value, key):
     final = []
-    while ( my_stack.size()):
-        final.append( my_stack.pop() )
-    return final
+    if alll:
+ 
+        while ( my_stack.size()):
+            final.append( my_stack.pop() )
+        return final
+    else:
+ 
+        while ( my_stack.size() and (value[my_stack.peek()] > value[key])):
+            final.append( my_stack.pop() )
+        return final
+
+        
 def i_post(exp):
     s = Stack()
     output = []
     a_exp = exp.split()
-    symbols = "ABCD"
+    symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     l_aexp = len(a_exp)
     index = 0
     value = {}
@@ -104,10 +113,10 @@ def i_post(exp):
             elif (value[top]< value[a_exp[index]]): 
                 s.push(a_exp[index])
             else:
-                output.extend(pop_all(s))
+                output.extend(pop_all(s,0,value,a_exp[index]))
                 s.push(a_exp[index])
         index += 1
-    output.extend(pop_all(s))
+    output.extend(pop_all(s,1,value,'+'))
     return output            
 
 print i_post("A * B + C * D")
