@@ -75,12 +75,14 @@ def convert(n,base):
 
 print convert( 27,16)    
 #recursive
-def r_cnovert(n,base, digits  = "0123456789ABCDEF"):
-    if n < base:
-        return n 
+def r_convert(no,base, digits  = "0123456789ABCDEF"):
+    if no < base:
+        return no 
     else:
-        return str(no %base) + str(r_convert( ((no - rem )/ base),base, digits  = "0123456789ABCDEF"))
-        
+        rem = no % base
+        return  str(r_convert( ((no - rem )/ base),base, digits  = "0123456789ABCDEF"))  + str(digits[rem])
+
+print r_convert( 27,16)            
     
 #+++++++++++++++++++++++++++++to binary+++++++++++++++++++++++++++++
 
