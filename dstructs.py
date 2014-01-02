@@ -59,6 +59,7 @@ print parcheck(sti)
 
 #------------------------------Parentheses ---------------------
 #+++++++++++++++++++++++++++++from decimal to any base under hexamdecimal++++++
+#iterative
 def convert(n,base):
     no = n
     s = Stack()
@@ -73,7 +74,14 @@ def convert(n,base):
     return s.iter()
 
 print convert( 27,16)    
-
+#recursive
+def r_cnovert(n,base, digits  = "0123456789ABCDEF"):
+    if n < base:
+        return n 
+    else:
+        return str(no %base) + str(r_convert( ((no - rem )/ base),base, digits  = "0123456789ABCDEF"))
+        
+    
 #+++++++++++++++++++++++++++++to binary+++++++++++++++++++++++++++++
 
 #$$$$$$$$$$$$$$$$$$$$$ infix to postfix$$$$$$$$$$$$$$
@@ -138,7 +146,6 @@ def pop_eval( stack,operation):
         return ns[0] * ns[1]
     if ( operation == '/'):
         return float(ns[1]) / ns[0]        
-
         
 def p_e( user_input):
     '''evaluatse a postfix expression , input should be a
@@ -179,11 +186,12 @@ def hot_potato( ppl, num):
 
     while( q.size() != 1):
         count  = 0
+
         while ( count < num  ):
             front = q.dequeue()
             q.enqueue(front)
             count += 1
-        
+        q.dequeue()
     return q.dequeue()
 
 print(hot_potato(["Bill","David","Susan","Jane","Kent","Brad"],7))
