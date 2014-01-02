@@ -156,8 +156,34 @@ def p_e( user_input):
 print p_e('7 8 + 3 2 + /')
 #-----------------------------postfix eval ----------------
 
+#-----Queue(better O(1) for removing elements and O(n) for adding elements 
 class Queue:
     def __init__(self):
         self.items = [] 
-    
+    def enqueue (self,item):
+        self.items.insert(0,item)
+    def dequeue(self):
+        return self.items.pop()
+    def size(self):
+        return len(self.items)
+    def isEmpty(self):
+        return self.items == []
+    def see ( self):
+        return [x for x in self.items]
+#----------hot potato simulation 
+
+def hot_potato( ppl, num):
+    q = Queue()
+    for person in ppl:
+        q.enqueue(person)
+
+    while( q.size() != 1):
+        count  = 0
+        while ( count < num  ):
+            front = q.dequeue()
+            q.enqueue(front)
+            count += 1
         
+    return q.dequeue()
+
+print(hot_potato(["Bill","David","Susan","Jane","Kent","Brad"],7))
