@@ -197,3 +197,41 @@ def hot_potato( ppl, num):
     return q.dequeue()
 
 print(hot_potato(["Bill","David","Susan","Jane","Kent","Brad"],7))
+
+
+#---------------------implementing a deck (Deque)------
+
+class Deque:
+    def __init__(self):
+        self.all = []
+    def front_add(self,item):
+        self.all.insert(0,item)
+    def front_remove(self):
+        return self.all.pop(0)
+    def back_add(self,item):
+        self.all.append(item)
+    def back_remove(self):
+        return self.all.pop()
+    def size(self):
+        return len(self.all)
+#simple palindrome checker using Deque
+def palindrome_checker( user_input):
+    '''please enter a string'''
+    ui = user_input.split()
+    ui = ''.join(ui)
+    print ui 
+    data = Deque()
+    for el in ui: 
+        data.back_add(el)
+    while ( data.size()>1):
+        print data.size()
+        front = data.front_remove().upper()
+        back = data.back_remove().upper()
+        if ( front != back ):
+            print front,back
+            return False
+    return True 
+
+
+            
+print  palindrome_checker("Live not on evil")
