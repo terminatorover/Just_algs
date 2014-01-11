@@ -1,5 +1,5 @@
 #bin/usr/python 
-
+#concept wise this really works like a turing machine
 
 def find_space( li,ind):
     '''x^ y output #x  ^y(the arrow is under y)
