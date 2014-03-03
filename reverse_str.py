@@ -1,4 +1,4 @@
-#bin/usr/python 
+#!bin/usr/python 
 #concept wise this really works like a turing machine
 
 def find_space( li,ind):
