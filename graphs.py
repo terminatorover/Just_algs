@@ -78,7 +78,7 @@ class Graph:
 g = Graph()
 g.add_vertex(2,{})
 g.add_vertex(4,{})
-g.add_edge(2,4,3)
+
 
 
 def get_all_short( TQueue, cost,dest_id):
@@ -110,7 +110,7 @@ def all_shortest_paths( input_graph,src_id,dest_id):
     fringe.add((src_id,[],0))
     done = False #set to true when we have added all our shortest paths to our all_short list
     while ( not ( fringe.isEmpty() ) and not done):
-
+        
         cur_vert_id,path,cost = fringe.remove() #get a node from the fringe(should be the least costly)
         
         if cur_vert_id == dest_id:#we found our destination
@@ -122,10 +122,14 @@ def all_shortest_paths( input_graph,src_id,dest_id):
         cur_vert = input_graph.get_vert(cur_vert_id)
 
         for neigh_id,weight in cur_vert.all_neighbours():
-            fringe.add((neigh_id , path + [neigh_id] , cost + weight)
+            fringe.add((neigh_id , path + [neigh_id] , cost + weight) )
+            
+                       
+                       
+                       
 
 
-#    return all_short
+    return all_short
 
     
 
@@ -149,7 +153,6 @@ def get_neighbour_cords( (x,y), (W,H)):
         neighs[top] = 1                           
     if valid_cord( bottom, (W,H)):
         neighs[bottom] = 1        
-                   
     return { ( x+1,y):1 , (x-1,y):1 , ( x,y+1):1 , (x,y-1):1}
 
 def all_cords( W,H):
@@ -171,5 +174,27 @@ def valid_cord((x,y) ,(W,H)):
   #-----> now that you have the graph (aka the x,y plane you need to get rid of 
                        #all the edges involving the construction , so we just need to make sure no othervertex can link up to them . to do this we simply loop over the construction site nodes and get all their valid neigbours and for each valid neigbour we use remove_edge where the src is the neighour and the dest the construction site--- so that we can remove all of the possible ways to get to it and viceversa . then we remove it off the graphs collection of vertcies. the reason that the last step is not sucfficent to get rid of these construction nodes is that when creating the graph we assumed they were linked up to their neighbours so the neigbours have edges that link up to these construction zones(which is wrong which is why we need to get rid of them for an accuate representaion
                            
-                          
+def no_paths( W,H, exceptions):
+    """Given the width and heigh of the box ( on the x,y plane ) + the construction sites returns 
+    #the number of paths 
+    #---note that the start is always be (0,0) and (W,H)"""
+    all_coordinates = all_cords( W,H )
+    #Now create the graph
+    G = Graph()
+    for x,y in all_coordinates:
+        map_to = get_neighbour_cords ( (x,y), ( W,H) )
+        G.add_vertex( (x,y), map_to)
+
+    #now we have made the graph with FULL CONNECTION(AKA like an x,y plane now we need to eliminate construction coordinates
+    for x,y in exceptions:
+        map_to = get_neighbour_cords ( (x,y), ( W,H) )
+        for exception_neigh in map_to.keys():
+            G.remove_edge( exception_neigh , ( x,y) )
+
+    #NOW WE HAVE AN ACCURATE GRAPH , and we run Dijkstra's to get a list of all the shortest paths
+    all_shortest = all_shortest_paths( G , (0,0) , (W,H) )
+    
+    return len(all_shortest)
+    
+
                            
