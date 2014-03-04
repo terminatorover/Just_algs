@@ -14,7 +14,9 @@ class Vertex:
     def is_connected(self,check_id):
         return not( None == self.neigh.get(check_id) )
 
-
+    def del_neigh(self,neigh_id):
+        if self.neigh.get(neigh_id) != None:
+            self.neigh.pop(neigh_id)
 
 class Graph:
     def __init__(self):
@@ -29,18 +31,30 @@ class Graph:
         attach_to = to.keys()
 
         for neigh_id in attach_to:#make sure it and its neighbour both know that they are now related
-            if self.vertcies.get(neigh_id) != None:
-                new_vertex.add_neighbour(neigh_id,to[neigh_id])
-                self.vertcies[neigh_id].add_neighbour(key,to[neigh_id])
+            if self.vertcies.get(neigh_id) == None: #important, if the neighbour you are trying to connect to doesn't exist make it and add it to the set of vertcies the graph has
+                new_neigh = Vertex(neigh_id)
+                self.vertcies[neigh_id] = new_neigh
+            new_vertex.add_neighbour(neigh_id,to[neigh_id])
+            self.vertcies[neigh_id].add_neighbour(key,to[neigh_id])
             
         #now,that you have established all the connections, add the vertex to our collective set of vertcies
         self.vertcies[key] = new_vertex
     
-    def add_edge(self,src,dest,weight):
+    def add_undirected_edge(self,src,dest,weight):
         #given the id of the two nodes src,dest it creates an edge between them , aka lets each vetex know that it is connected to the other by the given weight(aka add that data to each node)
+        if self.vertcies.get(src) == None or self.vertcies.get(dest) == None:
+            return False
+
         self.vertcies[src].add_neighbour(dest,weight)
         self.vertcies[dest].add_neighbour(src,weight)
-        
+        return True
+
+    def add_directed_edge(self,src,dest,weight):
+        if self.vertcies.get(src) == None:
+            return False
+        self.vertcies[src].add_neighbour(dest,weight)
+        return True
+
     def connection_check(self,vert_id, dest):
         if self.vertcies.get(vert_id) != None:
             src = self.vertcies.get(vert_id)
@@ -51,6 +65,15 @@ class Graph:
         return not( self.vertcies.get(vert_id) == None )
     def get_vert(self,vert_id):
         return self.vertcies.get(vert_id)
+    def remove_edge(self,src,dest):
+        #assumes a directed edge
+        if self.vertcies.get(src) == None or self.vertcies.get(dest) == None:
+            return False
+            
+        self.vertcies.get(src).del_neigh(dest)
+        self.vertcies.get(dest).del_neigh(src)
+        return True
+        
 
 g = Graph()
 g.add_vertex(2,{})
@@ -67,7 +90,6 @@ def get_all_short( TQueue, cost):
         remaining.append( cur_top[1])
         cur_top = TQueue.remove()
     return remaining
-        
         
 
 def all_shortest_paths( input_graph,src_id,dest_id):
@@ -106,9 +128,48 @@ def all_shortest_paths( input_graph,src_id,dest_id):
     return all_short
 
     
-    
-    
 
-        
+                           
+#----------------------------------------------------processing input file
 
+def get_neighbour_cords( (x,y), (W,H)):
 
+#takes in (x,y) coordinates and gives us back all the neightbouring node's coordinates and their weights so we can just use the out put of this function for add_vertex 
+
+    neighs = {}
+    left = ( x -1, y)
+    right = ( x + 1 ,y)
+    top = ( x , y + 1)
+    bottom = ( x ,y - 1)
+    if valid_cord( left, (W,H)):
+        neighs[left] = 1                           
+    if valid_cord( right, (W,H)):
+        neighs[right] = 1                           
+    if valid_cord( top, (W,H)):
+        neighs[top] = 1                           
+    if valid_cord( bottom, (W,H)):
+        neighs[bottom] = 1        
+                   
+    return { ( x+1,y):1 , (x-1,y):1 , ( x,y+1):1 , (x,y-1):1}
+
+def all_cords( W,H):
+    "width and height of the matrix world "
+    all = []                       
+    for i in range(W+1):
+        for j in range(H+1):
+            all.append((i,j) )
+
+def valid_cord((x,y) ,(W,H)):
+    if ( x > W or  x < 0  or y > H or y < 0):
+        return False                           
+    else:
+        return True                           
+
+#given W,H use all_cords to get all coordinates 
+      #go through each coordinate and use get_neighbour_cord's output(which is a dictionary of all the valid! neighbouring vertcies and all their weights) as input for the add_vertex function (which takes the id of the new vertex and all the neighbours and their neighbours with weights(dic key/value pair)
+
+  #-----> now that you have the graph (aka the x,y plane you need to get rid of 
+                       #all the edges involving the construction , so we just need to make sure no othervertex can link up to them . to do this we simply loop over the construction site nodes and get all their valid neigbours and for each valid neigbour we use remove_edge where the src is the neighour and the dest the construction site--- so that we can remove all of the possible ways to get to it and viceversa . then we remove it off the graphs collection of vertcies. the reason that the last step is not sucfficent to get rid of these construction nodes is that when creating the graph we assumed they were linked up to their neighbours so the neigbours have edges that link up to these construction zones(which is wrong which is why we need to get rid of them for an accuate representaion
+                           
+                          
+                           
