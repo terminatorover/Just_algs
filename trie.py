@@ -87,6 +87,21 @@ class Trie:
         return recs
 
         
+    def find_longest(self,input_ip):
+        ret_val = None
+        cur_val = ""
+        current = self.root
+        for bit in input_ip:
+            if current.get_node(bit) == None:#then you don't have that letter :DONE
+                return ret_val  
+            current = current.get_node(bit)
+            cur_val += bit
+            if current.full_word():
+                ret_val = cur_val 
+
+
+        return ret_val
+        
 
 new_trie = Trie()
 new_trie.add("dog")
@@ -95,4 +110,5 @@ new_trie.add("catle")
 new_trie.add("catleelkj")
 new_trie.add("catled")
 
-print new_trie.reccomend("z",3)
+#print new_trie.reccomend("z",3)
+print new_trie.find_longest("catleelk")
