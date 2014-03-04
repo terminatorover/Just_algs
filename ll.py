@@ -85,7 +85,7 @@ x.add(1)
 x.add(2)
 x.add(-1)
 x.add(10)
-
+x.add(2.5)
 print x.iter()
             
         
@@ -99,10 +99,11 @@ class TQueue(linkedlist):
 
         else:
             tmp = self.root
-
+            
             if tmp.getnextnode() == None :#there is only one node(namely the root node)
+
                 
-                if tmp.getdata()[2] > input_data:
+                if tmp.getdata()[2] > input_data[2]:
                     print "PUT IT AFTER  THE ROOT "
                     tmp.setnextnode(Node(input_data))
 
@@ -114,12 +115,13 @@ class TQueue(linkedlist):
                 
             else:
                 done = False
+
                 while ( tmp.getnextnode() != None):
                     print tmp.getdata()[2]
                     #now check if our value is between two nodes, if so we insert it in the middle
                     print "INPUT DATA: ",input_data,"FIRST NODE: ",tmp.getdata()[2],"SECOND NODE: ",tmp.getnextnode().getdata()[2]
                         
-                    if input_data < tmp.getdata()[2] and input_data > tmp.getnextnode().getdata()[2]:
+                    if input_data[2] < tmp.getdata()[2] and input_data[2] > tmp.getnextnode().getdata()[2]:
                         print "IN BETWEEEN " 
                         lead = tmp.getnextnode()
                         follower = tmp
@@ -128,7 +130,7 @@ class TQueue(linkedlist):
                         follower.setnextnode(new_node)
                         done = True
                         break 
-                    if input_data > tmp.getdata()[2]:
+                    if input_data[2] > tmp.getdata()[2]:
                         new_node = Node(input_data)
                         new_node.setnextnode(tmp)
                         self.root = new_node
@@ -155,6 +157,8 @@ class TQueue(linkedlist):
         itr = self.root 
         if itr == None :
             return 
+        if itr.getdata()[0] == node_id:#for the root having the id
+            self.root = itr.getnextnode()
         while itr.getnextnode() != None and itr.getnextnode().getdata()[0] != node_id: 
             itr = itr.getnextnode()
             
@@ -165,3 +169,11 @@ class TQueue(linkedlist):
             next = itr.getnextnode().getnextnode()
             itr.setnextnode(next)
             
+Q = TQueue()
+#Q.add( ((0,0),[],0))
+#Q.add( ((0,0),[],1))
+Q.add( ((1,0),[],100))
+#Q.add( ((0,0),[],3))
+Q.add( ((2,0),[],10))
+Q.add( ((3,0),[],50))
+print Q.iter()
