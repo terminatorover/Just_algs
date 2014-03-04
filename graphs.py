@@ -81,12 +81,12 @@ g.add_vertex(4,{})
 g.add_edge(2,4,3)
 
 
-def get_all_short( TQueue, cost):
+def get_all_short( TQueue, cost,dest_id):
     #helper , takes in the priority queue and the cost of the shortest path found so far and returns
     #all other shortest paths , aka paths of the same cost if there are any left if not retuns None
     remaining = []
     cur_top = TQueue.add()
-    while( not(TQueue.isEmpty()) and cur_top[2] <= cost):
+    while( not(TQueue.isEmpty()) and cur_top[2] <= cost and cur_top[0] == dest_id ):
         remaining.append( cur_top[1])
         cur_top = TQueue.remove()
     return remaining
@@ -115,7 +115,7 @@ def all_shortest_paths( input_graph,src_id,dest_id):
         
         if cur_vert_id == dest_id:#we found our destination
             all_short.append(path)
-            remaining_shortest_paths = get_all_short( fringe, cost)
+            remaining_shortest_paths = get_all_short( fringe, cost,dest_id)
             all_short.extend(remaining_shortest_paths) 
             done = True
 
@@ -125,7 +125,7 @@ def all_shortest_paths( input_graph,src_id,dest_id):
             fringe.add((neigh_id , path + [neigh_id] , cost + weight)
 
 
-    return all_short
+#    return all_short
 
     
 
