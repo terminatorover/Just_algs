@@ -86,7 +86,7 @@ def get_all_short( TQueue, cost,dest_id):
     #helper , takes in the priority queue and the cost of the shortest path found so far and returns
     #all other shortest paths , aka paths of the same cost if there are any left if not retuns None
     remaining = []
-    cur_top = TQueue.add()
+    cur_top = TQueue.remove()
     while( not(TQueue.isEmpty()) and cur_top[2] <= cost and cur_top[0] == dest_id ):
         remaining.append( cur_top[1])
         cur_top = TQueue.remove()
@@ -111,7 +111,7 @@ def all_shortest_paths( input_graph,src_id,dest_id):
     #we took to get there and the cost it took to get there. 
     fringe.add((src_id,[],0))
     done = False #set to true when we have added all our shortest paths to our all_short list
-    print "EMPTY OR NOT",fringe.isEmpty()
+
     while ( not ( fringe.isEmpty() ) and not done):
 
         cur_vert_id,path,cost = fringe.remove() #get a node from the fringe(should be the least costly)
@@ -189,7 +189,7 @@ def no_paths( W,H, exceptions):
         G.add_vertex( (x,y), map_to)
 
     #now we have made the graph with FULL CONNECTION(AKA like an x,y plane now we need to eliminate construction coordinates
-    print G
+#    print G
     for x,y in exceptions:
         map_to = get_neighbour_cords ( (x,y), ( W,H) )
         for exception_neigh in map_to.keys():
@@ -202,4 +202,4 @@ def no_paths( W,H, exceptions):
     
 
                            
-print no_paths(2,2, [(1,1)])
+print "FINAL ANSWER", no_paths(2,2, [(1,1)])
