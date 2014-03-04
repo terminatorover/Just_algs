@@ -74,7 +74,8 @@ class Graph:
         self.vertcies.get(dest).del_neigh(src)
         return True
         
-
+    def __str__(self):
+        return str(self.vertcies.keys())
 g = Graph()
 g.add_vertex(2,{})
 g.add_vertex(4,{})
@@ -98,7 +99,7 @@ def all_shortest_paths( input_graph,src_id,dest_id):
     #first if the source,and dest vertcies are not present in the graph we return nothing
     src_vert_exist = input_graph.vert_exist(src_id)
     dest_vert_exist = input_graph.vert_exist(dest_id)
-    if src_vert or dest_vert :
+    if src_vert_exist or dest_vert_exist :
         return []
     
     src_vert = input_graph.get_vert(src_id)
@@ -153,15 +154,15 @@ def get_neighbour_cords( (x,y), (W,H)):
         neighs[top] = 1                           
     if valid_cord( bottom, (W,H)):
         neighs[bottom] = 1        
-    return { ( x+1,y):1 , (x-1,y):1 , ( x,y+1):1 , (x,y-1):1}
+    return neighs
 
 def all_cords( W,H):
     "width and height of the matrix world "
-    all = []                       
+    all_c = []                       
     for i in range(W+1):
         for j in range(H+1):
-            all.append((i,j) )
-
+                all_c.append((i,j) )
+    return all_c
 def valid_cord((x,y) ,(W,H)):
     if ( x > W or  x < 0  or y > H or y < 0):
         return False                           
@@ -183,11 +184,17 @@ def no_paths( W,H, exceptions):
     G = Graph()
     for x,y in all_coordinates:
         map_to = get_neighbour_cords ( (x,y), ( W,H) )
+        print "MAP TO ",map_to.keys()
+        print "/n"
+
         G.add_vertex( (x,y), map_to)
 
     #now we have made the graph with FULL CONNECTION(AKA like an x,y plane now we need to eliminate construction coordinates
+    print G
     for x,y in exceptions:
         map_to = get_neighbour_cords ( (x,y), ( W,H) )
+        print "MAP TO ",map_to.keys()
+        print "/n"
         for exception_neigh in map_to.keys():
             G.remove_edge( exception_neigh , ( x,y) )
 
@@ -198,3 +205,4 @@ def no_paths( W,H, exceptions):
     
 
                            
+print no_paths(2,2, [(1,1)])
