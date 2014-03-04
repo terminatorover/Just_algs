@@ -75,7 +75,7 @@ class Graph:
         return True
         
     def __str__(self):
-        return str(self.vertcies.keys())
+        return str([ str((vertex_id,self.vertcies[vertex_id].all_neighbours())) + "==========================" for vertex_id in  self.vertcies])
 g = Graph()
 g.add_vertex(2,{})
 g.add_vertex(4,{})
@@ -99,8 +99,10 @@ def all_shortest_paths( input_graph,src_id,dest_id):
     #first if the source,and dest vertcies are not present in the graph we return nothing
     src_vert_exist = input_graph.vert_exist(src_id)
     dest_vert_exist = input_graph.vert_exist(dest_id)
+    closed_list = [] #this is a list of all the coordinates i have already visited, if i have been there already i don't go back again since visiting it(aka going there knowing its not gold and adding all of its children to the Queue) means that i have already figure out the leas costly way to get to it
 
     if not(src_vert_exist) or not(dest_vert_exist) :
+        print "DEST AND SRC DON'T EXIST"
         return []
     
     src_vert = input_graph.get_vert(src_id)
@@ -111,24 +113,37 @@ def all_shortest_paths( input_graph,src_id,dest_id):
     #we took to get there and the cost it took to get there. 
     fringe.add((src_id,[],0))
     done = False #set to true when we have added all our shortest paths to our all_short list
-
+    count = 0
     while ( not ( fringe.isEmpty() ) and not done):
-
+        print "FRINGE ",fringe.iter()
         cur_vert_id,path,cost = fringe.remove() #get a node from the fringe(should be the least costly)
-        
+
+#        count += 1
+ #       if ( count == 20):
+#            done = True
         if cur_vert_id == dest_id:#we found our destination
-            all_short.append(path)
+
+            print "CURRENT VETEX",cur_vert_id,"DEST ID",dest_id
+            print "FRINGE ",fringe.iter()
+            all_short.append(path + [cur_vert_id])
             remaining_shortest_paths = get_all_short( fringe, cost,dest_id)
             all_short.extend(remaining_shortest_paths) 
             done = True
+        else:
+            closed_list.append(cur_vert_id)
 
         cur_vert = input_graph.get_vert(cur_vert_id)
-
+#        print "-------------------------"
+#n        print "CURRENT VERTEX ID",cur_vert.id 
+#        print "+++++++++++++++++++++++++++++++++++++++++"
+#        print "Cur Vert",cur_vert_id,"Its neighbours",cur_vert.all_neighbours()
         for neigh_id,weight in cur_vert.all_neighbours():
-            fringe.add((neigh_id , path + [neigh_id] , cost + weight) )
+            print "ADD NODE ", (neigh_id ,cost + weight) 
+            if not ( neigh_id in closed_list):
+                fringe.add((neigh_id , path + [neigh_id] , cost + weight) )
             
                        
-                       
+    print "DESTINATION", dest_id
                        
 
 
@@ -163,7 +178,7 @@ def all_cords( W,H):
     all_c = []                       
     for i in range(W+1):
         for j in range(H+1):
-                all_c.append((i,j) )
+            all_c.append((i,j) )
     return all_c
 def valid_cord((x,y) ,(W,H)):
     if ( x > W or  x < 0  or y > H or y < 0):
@@ -184,13 +199,16 @@ def no_paths( W,H, exceptions):
     all_coordinates = all_cords( W,H )
     #Now create the graph
     G = Graph()
+    print G
     for x,y in all_coordinates:
         map_to = get_neighbour_cords ( (x,y), ( W,H) )
         G.add_vertex( (x,y), map_to)
 
     #now we have made the graph with FULL CONNECTION(AKA like an x,y plane now we need to eliminate construction coordinates
-#    print G
+    print G
+    
     for x,y in exceptions:
+
         map_to = get_neighbour_cords ( (x,y), ( W,H) )
         for exception_neigh in map_to.keys():
             G.remove_edge( exception_neigh , ( x,y) )
@@ -202,4 +220,4 @@ def no_paths( W,H, exceptions):
     
 
                            
-print "FINAL ANSWER", no_paths(2,2, [(1,1)])
+print "FINAL ANSWER", no_paths(7,1, [(1,0),(4,1)])
