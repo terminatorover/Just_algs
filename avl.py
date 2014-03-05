@@ -49,13 +49,43 @@ class AVL:
     
     def update(self,node):
         #given a node updates the height of it's parents(used in adding routine)
+        #also returns the node in the tree that happens to be unbalanced
         if node == None:
             return None
         if node.get_h() > 2 or node.get_h() < -2:
-            update (node.get_parent())
+            #this node is valid so now increment the height of its parent appropraitely
+            parent = node.get_parent()
+            if parent != None:
+                if node.is_lc():
+                    parent_h = parent.get_h()
+                    parent.set_h(parent_h + 1)
+                else:
+                    parent_h = parent.get_h()
+                    parent.set_h(parent_h - 1)                
+
+            update(parent)
         else:
             return node
+        
+    #-------------------------------------------------------------ROTATION 
+    def ll_rotation(self,node):
+        #does a left left rotaion given the unbalanced node
+        return 
+    def rr_rotation(self,node):
+        #does a  right right rotaion given the unbalanced node
+        return 
+    def lr_rotation(self,node):
+        #does a  left right rotaion given the unbalanced node
+        return 
+    def rl_rotation(self,node):
+        #does a  right left rotaion given the unbalanced node
+        return 
 
+    def balancer(self,node):
+        #given the node that isn't balanced balances it figures out which type
+        #of rotation to use and then calls one of helper rotation functions
+        
+        
     def add(self,key):
         #given a key add that to the AVL TREE
         new_node = Node(key)
