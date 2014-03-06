@@ -68,22 +68,79 @@ class AVL:
             return node
         
     #-------------------------------------------------------------ROTATION 
-    def ll_rotation(self,node):
-        #does a left left rotaion given the unbalanced node
+    def l_rotation(self,node):
+        #does a left  rotaion given the unbalanced node
+        x = node
+        y = node.get_rc()
+        A = node.get_lc()
+        C = y.get_rc()
+        B = y.get_lc()
+        parent = x.get_parent()
+        left_right = x.is_lc()# True if x is the left child False if not
+        if parent == None:
+            self.root = y 
+        else:
+            if left_right:#if True it means we should set the parent's left child to y 
+                parent.set_lc(y)
+            else:
+                parent.set_rc(y)
+        #pointer movments
+        y.set_lc(x)
+        y.set_rc(C)
+
+        x.set_lc(A)        
+        x.set_rc(B)
         return 
-    def rr_rotation(self,node):
-        #does a  right right rotaion given the unbalanced node
+    def r_rotation(self,node):
+        #does a  right rotaion given the unbalanced node
+        y = node
+        x = node.get_lc()
+        A = x.get_lc()
+        B = x.get_rc()
+        C = y.get_rc()
+        parent = y.get_parent()
+        left_right = y.is_lc()
+        if parent == None:
+            self.root = x
+        else:
+            if left_right:#if True it means we should set the parent's left child to y 
+                parent.set_lc(x)
+            else:
+                parent.set_rc(x)
+        x.set_lc(A)
+        x.set_rc(y)
+
+        y.set_rc(B)
+        y.set_lc(C)
         return 
-    def lr_rotation(self,node):
-        #does a  left right rotaion given the unbalanced node
-        return 
-    def rl_rotation(self,node):
-        #does a  right left rotaion given the unbalanced node
-        return 
+
 
     def balancer(self,node):
         #given the node that isn't balanced balances it figures out which type
         #of rotation to use and then calls one of helper rotation functions
+        node_h = node.get_h()
+        if node_h > 1:#then its at least an L rotation 
+            next_node = node.get_lc()
+            if next_node.get_h() >= 1:
+                rotation = "LL"
+            elif next_node.get_h() <= -1:
+                rotation = "LR"
+        elif node_h < -1:
+            next_node = node.get_rc()
+            if next_node.get_h() >= 1:
+                rotation = "RL"
+            elif next_node.get_h() <= -1:
+                rotation = "RR"
+        if rotation == "LL":
+            self.l_rotation(node)
+        elif rotation == "RR":
+            self.r_rotation(node)
+        elif rotation == "LR":#two rotations, left on the inside and right ont the outside
+            self.l_rotation(next_node)
+            self.r_rotation(node)
+        else:#RL rotation
+            self.r_rotation(next_node)
+            self.l_rotation(node)
         
         
     def add(self,key):
